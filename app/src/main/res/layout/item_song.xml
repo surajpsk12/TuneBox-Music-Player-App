@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardElevation="8dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardBackgroundColor="#FFFFFF"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Album Art with Play Button -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            card_view:cardCornerRadius="12dp"
+            card_view:cardElevation="4dp"
+            android:layout_marginEnd="16dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Album Art Background -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/album_gradient" />
+
+                <!-- Music Note Icon -->
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_music_note"
+                    android:tint="#FFFFFF"
+                    android:alpha="0.8" />
+
+                <!-- Play Button Overlay -->
+                <ImageView
+                    android:id="@+id/playButton"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_play_circle"
+                    android:background="@drawable/play_button_bg"
+                    android:tint="#FF6B6B"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Song Information -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Song Title"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Bohemian Rhapsody" />
+
+            <TextView
+                android:id="@+id/songArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artist Name"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Queen" />
+
+            <!-- Duration and Additional Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
+
+                <!-- Duration with Clock Icon -->
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_access_time"
+                    android:layout_marginEnd="4dp"
+                    android:tint="#999999" />
+
+                <TextView
+                    android:id="@+id/songDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3:45"
+                    android:textSize="12sp"
+                    android:textColor="#999999"
+                    android:layout_marginEnd="16dp"
+                    tools:text="5:55" />
+
+                <!-- Quality Badge -->
+                <TextView
+                    android:id="@+id/qualityBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HD"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/quality_badge_bg"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="visible" />
+
+                <!-- Favorite Heart -->
+                <ImageView
+                    android:id="@+id/favoriteIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_favorite_border"
+                    android:tint="#E0E0E0"
+                    android:layout_weight="1"
+                    android:layout_gravity="end"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="2dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- More Options Menu -->
+        <ImageView
+            android:id="@+id/moreOptions"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_more_vert"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:tint="#999999"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <!-- Subtle Bottom Border -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_border_gradient"
+        android:alpha="0.3" />
+
+</androidx.cardview.widget.CardView>
