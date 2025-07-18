@@ -1,49 +1,27 @@
 package com.surajvanshsv.tunebox.model;
 
-import android.net.Uri;
+import java.io.Serializable;
 
-public class Song {
+public class Song implements Serializable {
     private String title;
     private String artist;
-    private long duration;
-    private Uri uri;
+    private String duration;
+    private String filePath;
+    private boolean isFavorite;
 
-    public Song(String title, String artist, long duration, Uri uri) {
+    public Song(String title, String artist, String duration, String filePath, boolean isFavorite) {
         this.title = title;
         this.artist = artist;
         this.duration = duration;
-        this.uri = uri;
+        this.filePath = filePath;
+        this.isFavorite = isFavorite;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
+    public String getArtist() { return artist; }
+    public String getDuration() { return duration; }
+    public String getFilePath() { return filePath; }
+    public boolean isFavorite() { return isFavorite; }
 
-    public String getArtist() {
-        return artist;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public Uri getUri() {
-        return uri;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
-    }
-
-    public void setUri(Uri uri) {
-        this.uri = uri;
-    }
+    public void setFavorite(boolean favorite) { isFavorite = favorite; }
 }

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +24,7 @@
                     android:id="@+id/appTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="My Music"
+                    android:text="TuneBox"
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
@@ -179,10 +180,10 @@
                             android:padding="12dp">
 
                                 <TextView
-                                    android:id="@+id/totalDuration"
+                                    android:id="@+id/favouriteSongs"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="8h 32m"
+                                    android:text="30"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:textColor="#FFFFFF" />
@@ -190,7 +191,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Duration"
+                                    android:text="Favourite's"
                                     android:textSize="12sp"
                                     android:textColor="#FFFFFF"
                                     android:alpha="0.8" />
@@ -224,8 +225,179 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             app:layout_constraintTop_toBottomOf="@id/sectionTitle"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/miniPlayer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Mini Player -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/miniPlayer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                        <!-- Progress Bar -->
+                        <ProgressBar
+                            android:id="@+id/miniPlayerProgress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:progressTint="#FF6B6B"
+                            android:progressBackgroundTint="#E0E0E0"
+                            android:progress="45"
+                            android:max="100" />
+
+                        <!-- Main Content -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="12dp"
+                            android:gravity="center_vertical">
+
+                                <!-- Album Art -->
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="4dp"
+                                    android:layout_marginEnd="12dp">
+
+                                        <FrameLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+
+                                                <!-- Album Art Background -->
+                                                <ImageView
+                                                    android:id="@+id/miniAlbumArt"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:scaleType="centerCrop"
+                                                    android:src="@drawable/default_album_art" />
+
+                                                <!-- Music Note Icon Overlay -->
+                                                <ImageView
+                                                    android:layout_width="20dp"
+                                                    android:layout_height="20dp"
+                                                    android:layout_gravity="center"
+                                                    android:src="@drawable/ic_music_note"
+                                                    android:alpha="0.8"
+                                                    app:tint="#FFFFFF" />
+
+                                        </FrameLayout>
+
+                                </androidx.cardview.widget.CardView>
+
+                                <!-- Song Information -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/miniSongTitle"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Song Title"
+                                            android:textSize="16sp"
+                                            android:textStyle="bold"
+                                            android:textColor="#1A1A1A"
+                                            android:fontFamily="sans-serif-medium"
+                                            android:maxLines="1"
+                                            android:ellipsize="end"
+                                            tools:text="Bohemian Rhapsody" />
+
+                                        <TextView
+                                            android:id="@+id/miniSongArtist"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Artist Name"
+                                            android:textSize="12sp"
+                                            android:textColor="#666666"
+                                            android:layout_marginTop="2dp"
+                                            android:maxLines="1"
+                                            android:ellipsize="end"
+                                            tools:text="Queen" />
+
+                                </LinearLayout>
+
+                                <!-- Control Buttons -->
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                        <!-- Previous Button -->
+                                        <ImageView
+                                            android:id="@+id/miniPrevButton"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_skip_previous"
+                                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                                            android:padding="6dp"
+                                            android:clickable="true"
+                                            android:focusable="true"
+                                            android:layout_marginEnd="4dp"
+                                            app:tint="#666666" />
+
+                                        <!-- Play/Pause Button -->
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="40dp"
+                                            android:layout_height="40dp"
+                                            app:cardCornerRadius="20dp"
+                                            app:cardElevation="4dp"
+                                            app:cardBackgroundColor="#FF6B6B"
+                                            android:layout_marginHorizontal="8dp">
+
+                                                <ImageView
+                                                    android:id="@+id/miniPlayPauseButton"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:src="@drawable/ic_play_arrow"
+                                                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                                                    android:padding="8dp"
+                                                    android:clickable="true"
+                                                    android:focusable="true"
+                                                    app:tint="#FFFFFF" />
+
+                                        </androidx.cardview.widget.CardView>
+
+                                        <!-- Next Button -->
+                                        <ImageView
+                                            android:id="@+id/miniNextButton"
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_skip_next"
+                                            android:background="?android:attr/selectableItemBackgroundBorderless"
+                                            android:padding="6dp"
+                                            android:clickable="true"
+                                            android:focusable="true"
+                                            android:layout_marginStart="4dp"
+                                            app:tint="#666666" />
+
+                                </LinearLayout>
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
