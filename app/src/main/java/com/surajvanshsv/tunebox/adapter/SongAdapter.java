@@ -5,12 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.surajvanshsv.tunebox.R;
 import com.surajvanshsv.tunebox.model.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
@@ -21,7 +23,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     public SongAdapter(Context context, List<Song> songList, OnSongClickListener listener) {
         this.context = context;
-        this.songList = songList;
+        this.songList = new ArrayList<>(songList);
         this.listener = listener;
     }
 
@@ -65,5 +67,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             artist = itemView.findViewById(R.id.songArtist);
             duration = itemView.findViewById(R.id.songDuration);
         }
+    }
+
+    // This method replaces the current list with a new one and refreshes the UI
+    public void updateList(List<Song> newList) {
+        songList.clear();
+        songList.addAll(newList);
+        notifyDataSetChanged();
     }
 }

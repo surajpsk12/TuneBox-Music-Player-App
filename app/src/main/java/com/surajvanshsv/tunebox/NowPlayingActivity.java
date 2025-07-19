@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.surajvanshsv.tunebox.model.Song;
+import com.surajvanshsv.tunebox.utils.FavoriteManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class NowPlayingActivity extends AppCompatActivity {
     private boolean isRepeatEnabled = false;
     private boolean isShuffleEnabled = false;
 
+    private FavoriteManager favoriteManager;
+
     private Runnable updateSeekRunnable = new Runnable() {
         @Override
         public void run() {
@@ -56,6 +59,7 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         initViews();
 
+        favoriteManager = new FavoriteManager(this);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         songList = (ArrayList<Song>) getIntent().getSerializableExtra("songList");
@@ -129,9 +133,16 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         favoriteButton.setOnClickListener(v -> {
             Song currentSong = songList.get(currentIndex);
-            currentSong.setFavorite(!currentSong.isFavorite());
-            favoriteButton.setImageResource(currentSong.isFavorite() ?
-                    R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+            String path = currentSong.getFilePath();
+            boolean isFav = favoriteManager.isFavorite(path);
+
+            if (isFav) {
+                favoriteManager.removeFavorite(path);
+                favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+            } else {
+                favoriteManager.addFavorite(path);
+                favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+            }
         });
 
         backButton.setOnClickListener(v -> finish());
@@ -184,8 +195,12 @@ public class NowPlayingActivity extends AppCompatActivity {
             playPauseBtn.setImageResource(R.drawable.ic_pause);
             handler.post(updateSeekRunnable);
 
-            favoriteButton.setImageResource(currentSong.isFavorite() ?
-                    R.drawable.ic_favorite_filled : R.drawable.ic_favorite_border);
+            // Show favorite icon correctly
+            favoriteButton.setImageResource(
+                    favoriteManager.isFavorite(currentSong.getFilePath())
+                            ? R.drawable.ic_favorite_filled
+                            : R.drawable.ic_favorite_border
+            );
 
             loadAlbumArt(currentSong.getFilePath());
 
