@@ -43,8 +43,8 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_music_note"
-                    android:tint="#FFFFFF"
-                    android:alpha="0.8" />
+                    android:alpha="0.8"
+                    card_view:tint="#FFFFFF" />
 
                 <!-- Play Button Overlay -->
                 <ImageView
@@ -55,8 +55,8 @@
                     android:layout_margin="4dp"
                     android:src="@drawable/ic_play_circle"
                     android:background="@drawable/play_button_bg"
-                    android:tint="#FF6B6B"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    card_view:tint="#FF6B6B" />
 
             </FrameLayout>
 
@@ -108,7 +108,7 @@
                     android:layout_height="12dp"
                     android:src="@drawable/ic_access_time"
                     android:layout_marginEnd="4dp"
-                    android:tint="#999999" />
+                    card_view:tint="#999999" />
 
                 <TextView
                     android:id="@+id/songDuration"
@@ -140,13 +140,13 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_favorite_border"
-                    android:tint="#E0E0E0"
                     android:layout_weight="1"
                     android:layout_gravity="end"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="2dp" />
+                    android:padding="2dp"
+                    card_view:tint="#E0E0E0" />
 
             </LinearLayout>
 
@@ -160,10 +160,10 @@
             android:src="@drawable/ic_more_vert"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:padding="6dp"
-            android:tint="#999999"
             android:layout_marginStart="8dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            card_view:tint="#999999" />
 
     </LinearLayout>
 

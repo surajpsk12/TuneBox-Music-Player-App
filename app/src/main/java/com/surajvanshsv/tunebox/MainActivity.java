@@ -3,18 +3,24 @@ package com.surajvanshsv.tunebox;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.database.Cursor;
-import android.net.Uri;
+import android.text.TextWatcher;
+import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,45 +46,106 @@ public class MainActivity extends AppCompatActivity {
     private TextView totalSongsText, totalArtistsText, favouriteSongsText;
     private EditText searchEditText;
 
+    // Mini player views
+    private CardView miniPlayer;
+    private ProgressBar miniPlayerProgress;
+    private TextView miniSongTitle, miniSongArtist;
+    private ImageView miniPlayPauseButton, miniNextButton, miniPrevButton;
+
+    private int currentSongIndex = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Ensure this is your provided XML file
+        setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        totalSongsText = findViewById(R.id.totalSongs);
-        totalArtistsText = findViewById(R.id.totalArtists);
-        favouriteSongsText = findViewById(R.id.favouriteSongs);
-        searchEditText = findViewById(R.id.searchEditText);
+        initViews();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         favoriteManager = new FavoriteManager(this);
 
         songAdapter = new SongAdapter(this, songList, (song, position) -> {
-            Intent intent = new Intent(MainActivity.this, NowPlayingActivity.class);
-            intent.putExtra("songList", new ArrayList<>(songList));
-            intent.putExtra("position", position);
-            startActivity(intent);
+            currentSongIndex = position;
+            startNowPlayingActivity();
         });
+
         recyclerView.setAdapter(songAdapter);
 
-        // Request permissions
         if (hasPermission()) {
             loadSongs();
         } else {
             requestPermission();
         }
 
-        // Search filtering
-        searchEditText.addTextChangedListener(new android.text.TextWatcher() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(android.text.Editable s) {}
-
+            @Override public void afterTextChanged(Editable s) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterSongs(s.toString());
             }
         });
+
+        setupMiniPlayer();
+    }
+
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerView);
+        totalSongsText = findViewById(R.id.totalSongs);
+        totalArtistsText = findViewById(R.id.totalArtists);
+        favouriteSongsText = findViewById(R.id.favouriteSongs);
+        searchEditText = findViewById(R.id.searchEditText);
+
+        // Mini player
+        miniPlayer = findViewById(R.id.miniPlayer);
+        miniPlayerProgress = findViewById(R.id.miniPlayerProgress);
+        miniSongTitle = findViewById(R.id.miniSongTitle);
+        miniSongArtist = findViewById(R.id.miniSongArtist);
+        miniPlayPauseButton = findViewById(R.id.miniPlayPauseButton);
+        miniNextButton = findViewById(R.id.miniNextButton);
+        miniPrevButton = findViewById(R.id.miniPrevButton);
+    }
+
+    private void setupMiniPlayer() {
+        miniPlayer.setOnClickListener(v -> {
+            if (currentSongIndex >= 0) {
+                startNowPlayingActivity();
+            }
+        });
+
+        miniPlayPauseButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Play/Pause clicked", Toast.LENGTH_SHORT).show();
+            // Add playback toggle logic here
+        });
+
+        miniNextButton.setOnClickListener(v -> {
+            if (currentSongIndex < songList.size() - 1) {
+                currentSongIndex++;
+                updateMiniPlayer(songList.get(currentSongIndex));
+            }
+        });
+
+        miniPrevButton.setOnClickListener(v -> {
+            if (currentSongIndex > 0) {
+                currentSongIndex--;
+                updateMiniPlayer(songList.get(currentSongIndex));
+            }
+        });
+    }
+
+    private void updateMiniPlayer(Song song) {
+        miniPlayer.setVisibility(View.VISIBLE);
+        miniSongTitle.setText(song.getTitle());
+        miniSongArtist.setText(song.getArtist());
+        miniPlayerProgress.setProgress(0); // Reset or update based on playback position
+        // You can add logic to update album art if available
+    }
+
+    private void startNowPlayingActivity() {
+        Intent intent = new Intent(MainActivity.this, NowPlayingActivity.class);
+        intent.putExtra("songList", new ArrayList<>(songList));
+        intent.putExtra("position", currentSongIndex);
+        startActivity(intent);
     }
 
     private void filterSongs(String query) {
@@ -96,12 +163,9 @@ public class MainActivity extends AppCompatActivity {
         songList.clear();
         Set<String> artistSet = new HashSet<>();
 
-        Uri collection;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
-        } else {
-            collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        }
+        Uri collection = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                ? MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+                : MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
                 MediaStore.Audio.Media._ID,
@@ -115,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
         try (Cursor cursor = getContentResolver().query(collection, projection, selection, null, null)) {
             if (cursor != null) {
-                int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
                 int titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE);
                 int artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
                 int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
@@ -128,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                     long durationMs = cursor.getLong(durationColumn);
                     String duration = formatDuration(durationMs);
 
-                    Song song = new Song(title, artist, duration, path, false);
+                    Song song = new Song(title, artist, duration, path, favoriteManager.isFavorite(path));
                     songList.add(song);
                     artistSet.add(artist);
                 }

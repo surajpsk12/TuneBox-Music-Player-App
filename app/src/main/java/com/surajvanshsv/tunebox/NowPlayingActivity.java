@@ -139,11 +139,14 @@ public class NowPlayingActivity extends AppCompatActivity {
             if (isFav) {
                 favoriteManager.removeFavorite(path);
                 favoriteButton.setImageResource(R.drawable.ic_favorite_border);
+                currentSong.setFavorite(false); // ✅ sync object state
             } else {
                 favoriteManager.addFavorite(path);
                 favoriteButton.setImageResource(R.drawable.ic_favorite_filled);
+                currentSong.setFavorite(true); // ✅ sync object state
             }
         });
+
 
         backButton.setOnClickListener(v -> finish());
 

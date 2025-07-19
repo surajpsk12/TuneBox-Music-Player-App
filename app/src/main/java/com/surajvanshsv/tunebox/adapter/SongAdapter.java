@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         holder.artist.setText(song.getArtist());
         holder.duration.setText(song.getDuration());
 
+        // Show or hide favorite icon (optional: requires favoriteIcon in item_song.xml)
+        if (holder.favoriteIcon != null) {
+            holder.favoriteIcon.setVisibility(song.isFavorite() ? View.VISIBLE : View.GONE);
+        }
+
         // Handle item click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -60,16 +66,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     public static class SongViewHolder extends RecyclerView.ViewHolder {
         TextView title, artist, duration;
+        ImageView favoriteIcon; // optional
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.songTitle);
             artist = itemView.findViewById(R.id.songArtist);
             duration = itemView.findViewById(R.id.songDuration);
+            favoriteIcon = itemView.findViewById(R.id.favoriteIcon); // optional: make sure this ID exists in item_song.xml
         }
     }
 
-    // This method replaces the current list with a new one and refreshes the UI
     public void updateList(List<Song> newList) {
         songList.clear();
         songList.addAll(newList);

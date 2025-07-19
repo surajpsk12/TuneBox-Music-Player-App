@@ -37,14 +37,18 @@ public class FavoriteManager {
     }
 
     public Set<String> getFavorites() {
-        return new HashSet<>(preferences.getStringSet(KEY_FAVORITES, new HashSet<>()));
+        return preferences.getStringSet(KEY_FAVORITES, new HashSet<>());
     }
 
     private void saveFavorites(Set<String> favorites) {
         preferences.edit().putStringSet(KEY_FAVORITES, favorites).apply();
     }
 
-    // Toggle favorite (used in UI)
+    /**
+     * Toggle favorite state and return updated state.
+     * @param path File path of the song.
+     * @return true if song is now favorite, false otherwise.
+     */
     public boolean toggleFavorite(String path) {
         boolean isFav = isFavorite(path);
         if (isFav) {
@@ -55,7 +59,11 @@ public class FavoriteManager {
         return !isFav;
     }
 
-    // Get only favorite songs from full list
+    /**
+     * Filters only favorite songs from the provided list.
+     * @param allSongs Full song list.
+     * @return List of favorite songs.
+     */
     public List<Song> getFavoriteSongs(List<Song> allSongs) {
         Set<String> favoritePaths = getFavorites();
         List<Song> favoriteSongs = new ArrayList<>();
@@ -65,6 +73,7 @@ public class FavoriteManager {
                 favoriteSongs.add(song);
             }
         }
+
         return favoriteSongs;
     }
 }
