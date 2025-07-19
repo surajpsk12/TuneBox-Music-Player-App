@@ -18,9 +18,10 @@
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/sample-nowplaying.png" width="200" />
-  <img src="https://github.com/user-attachments/assets/sample-songlist.png" width="200" />
-  <img src="https://github.com/user-attachments/assets/sample-player.png" width="200" />
+  <img src="https://github.com/user-attachments/assets/1061eefd-8f52-4d61-9d2a-c9f771faccfa" width="200" />
+ <img src="https://github.com/user-attachments/assets/505d0b00-b3a5-4d58-baff-eb1ebcfb3ffa" width="200" />
+ <img src="https://github.com/user-attachments/assets/82a15057-5560-4265-9f36-af92b7144525" width="200"/>
+ <img src="https://github.com/user-attachments/assets/f2ec4a25-3c64-4a93-a527-648d9443d971" width="200"/>
 </p>
 
 **TuneBox** is a clean, fast, and modern **offline music player** built in **Java** that allows users to play local audio files, manage playlists, 
